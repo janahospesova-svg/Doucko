@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nauč se – objednávky</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f7f7fb;margin:0;padding:24px;color:#20232a}
+.wrap{max-width:1100px;margin:auto}.card{background:white;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 5px 20px #00000012}
+input,button{padding:11px;border-radius:10px;border:1px solid #ccc}button{cursor:pointer}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;border-bottom:1px solid #eee;vertical-align:top}
+.small{color:#666;font-size:13px}.error{color:#b42318}.ok{color:#067647}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📦 Objednávky Nauč se</h1>
+  <div class="card">
+    <label>Admin klíč <input id="key" type="password" style="width:320px"></label>
+    <button onclick="loadOrders()">Načíst objednávky</button>
+    <span id="status"></span>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Objednávka</th><th>Zákazník</th><th>Adresa</th><th>Položky</th><th>Celkem</th><th>E-mail</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table>
+  </div>
+</div>
+<script>
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function loadOrders(){
+ const status=document.getElementById("status");
+ try{
+   const r=await fetch("/api/orders",{headers:{"x-admin-key":document.getElementById("key").value}});
+   const data=await r.json();
+   if(!r.ok) throw new Error(data.error||"Chyba");
+   document.getElementById("orders").innerHTML=data.map(o=>`
+    <tr>
+      <td><b>${esc(o.order_number)}</b><div class="small">${new Date(o.created_at).toLocaleString("cs-CZ")}</div></td>
+      <td>${esc(o.customer_name)}<div class="small">${esc(o.customer_email)}<br>${esc(o.customer_phone)}</div></td>
+      <td>${esc(o.street)}<br>${esc(o.zip)} ${esc(o.city)}<div class="small">${esc(o.note)}</div></td>
+      <td>${o.items.map(i=>`${esc(i.name)} × ${i.quantity}`).join("<br>")}</td>
+      <td><b>${new Intl.NumberFormat("cs-CZ",{style:"currency",currency:"CZK",maximumFractionDigits:0}).format(o.total)}</b></td>
+      <td>${o.email_sent ? '<span class="ok">✓ odesláno</span>' : '<span class="error">✗ neodesláno</span>'}</td>
+    </tr>`).join("");
+   status.textContent=` Načteno ${data.length} objednávek.`;
+   status.className="ok";
+ }catch(e){status.textContent=" "+e.message;status.className="error"}
+}
+</script>
+</body>
+</html>
