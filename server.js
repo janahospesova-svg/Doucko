@@ -210,7 +210,7 @@ app.post("/api/orders", async (req, res) => {
       from: process.env.MAIL_FROM || process.env.SMTP_USER,
       to: ADMIN_EMAIL,
       replyTo: order.customerEmail,
-      subject: `Nová objednávka ${orderNumber} – Chytrá Třída`,
+      subject: `Nová objednávka ${orderNumber} – Nauč se`,
       text: emailText
     });
 
@@ -250,5 +250,5 @@ app.get("*", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Chytrá Třída běží na http://localhost:${PORT}`);
+  console.log(`Nauč se běží na http://localhost:${PORT}`);
 });

@@ -1,4 +1,4 @@
-# ChytráTřída – objednávkový systém
+# Nauč se – objednávkový systém
 
 Tato verze přidává skutečný server pro objednávky.
 

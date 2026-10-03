@@ -1,8 +1,8 @@
 {
-  "name": "chytra-trida",
+  "name": "nauc-se",
   "version": "1.0.0",
   "private": true,
-  "description": "Chytrá Třída – web s objednávkami, SQLite databází a e-mailovým upozorněním",
+  "description": "Nauč se – web s objednávkami, SQLite databází a e-mailovým upozorněním",
   "scripts": {
     "start": "node server.js"
   },

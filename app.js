@@ -13,7 +13,7 @@ Tato verze je stále DEMO: účty a další data používají localStorage.
 ================================================================
 */
 
-// ChytráTřída - frontend demo
+// Nauč se - frontend demo
 // PRO NASAZENÍ: změň ORDER_EMAIL na svůj skutečný e-mail.
 // Pozn.: čistý HTML/CSS/JS neumí bezpečně provozovat skutečné účty a posílat e-maily bez backendu.
 // Tato verze má funkční demo účty, recenze, košík a objednávkový mailto. Pro produkci doporučuji Supabase/Firebase + platební bránu.
@@ -22,18 +22,18 @@ Tato verze je stále DEMO: účty a další data používají localStorage.
 const ORDER_EMAIL = "objednavky@mojedoucovani.cz";
 
 const lecturers = [
-  {id:1,name:"Matěj",emoji:"👨‍🏫",bio:"Matematika a čeština pro mladší školáky. Vysvětluje krok za krokem a bez zbytečného stresu.",tags:["Matematika","Čeština","1.–5. třída"]},
-  {id:2,name:"Eliška",emoji:"👩‍🏫",bio:"Pomáhá dětem s domácími úkoly, čtením a základy angličtiny. Ráda používá hry a příklady z běžného života.",tags:["Čeština","Angličtina","1.–5. třída"]},
-  {id:3,name:"Adam",emoji:"🧑‍🏫",bio:"Specializuje se na matematiku a systematickou přípravu na přijímací zkoušky.",tags:["Matematika","Přijímačky","Procvičování"]}
+  {id:1,name:"Mara",emoji:"👨‍🏫",bio:"Matematika a čeština pro mladší školáky. Vysvětluje krok za krokem a bez zbytečného stresu.",tags:["Matematika","Čeština","1.–5. třída"]},
+  {id:2,name:"Vera",emoji:"👩‍🏫",bio:"Pomáhá dětem s domácími úkoly, čtením a základy angličtiny. Ráda používá hry a příklady z běžného života.",tags:["Čeština","Angličtina","1.–5. třída"]},
+  {id:3,name:"Jana",emoji:"🧑‍🏫",bio:"Specializuje se na matematiku a systematickou přípravu na přijímací zkoušky.",tags:["Matematika","Přijímačky","Procvičování"]}
 ];
 
 const courses = [
-  {id:"c1",type:"1-5",title:"Matematika 1.–5. třída",desc:"Základy počítání, slovní úlohy, geometrie a procvičování.",price:199,emoji:"➗",rating:0,reviews:0,lecturer:"Matěj",subscription:"Start"},
-  {id:"c2",type:"1-5",title:"Čeština hravě",desc:"Čtení, pravopis, větná stavba a zábavné procvičování.",price:199,emoji:"📚",rating:0,reviews:0,lecturer:"Eliška",subscription:"Start"},
-  {id:"c3",type:"1-5",title:"Angličtina pro školáky",desc:"Základní slovíčka, věty a krátká konverzace pro děti.",price:249,emoji:"🇬🇧",rating:0,reviews:0,lecturer:"Eliška",subscription:"Plus"},
-  {id:"c4",type:"prijimacky",title:"Přijímačky – matematika",desc:"Strukturované procvičování typových úloh a strategie řešení.",price:399,emoji:"🎯",rating:0,reviews:0,lecturer:"Adam",subscription:"Plus"},
-  {id:"c5",type:"prijimacky",title:"Přijímačky – čeština",desc:"Porozumění textu, gramatika a systematická příprava.",price:399,emoji:"📝",rating:0,reviews:0,lecturer:"Eliška",subscription:"Plus"},
-  {id:"c6",type:"prijimacky",title:"Kompletní přijímačkový balíček",desc:"Matematika + čeština + bonusové materiály a kontrolní testy.",price:699,emoji:"🏆",rating:0,reviews:0,lecturer:"Adam + Eliška",subscription:"Premium"}
+  {id:"c1",type:"1-5",title:"Matematika 1.–5. třída",desc:"Základy počítání, slovní úlohy, geometrie a procvičování.",price:199,emoji:"➗",rating:0,reviews:0,lecturer:"Mara",subscription:"Start"},
+  {id:"c2",type:"1-5",title:"Čeština hravě",desc:"Čtení, pravopis, větná stavba a zábavné procvičování.",price:199,emoji:"📚",rating:0,reviews:0,lecturer:"Vera",subscription:"Start"},
+  {id:"c3",type:"1-5",title:"Angličtina pro školáky",desc:"Základní slovíčka, věty a krátká konverzace pro děti.",price:249,emoji:"🇬🇧",rating:0,reviews:0,lecturer:"Vera",subscription:"Plus"},
+  {id:"c4",type:"prijimacky",title:"Přijímačky – matematika",desc:"Strukturované procvičování typových úloh a strategie řešení.",price:399,emoji:"🎯",rating:0,reviews:0,lecturer:"Jana",subscription:"Plus"},
+  {id:"c5",type:"prijimacky",title:"Přijímačky – čeština",desc:"Porozumění textu, gramatika a systematická příprava.",price:399,emoji:"📝",rating:0,reviews:0,lecturer:"Vera",subscription:"Plus"},
+  {id:"c6",type:"prijimacky",title:"Kompletní přijímačkový balíček",desc:"Matematika + čeština + bonusové materiály a kontrolní testy.",price:699,emoji:"🏆",rating:0,reviews:0,lecturer:"Jana + Vera",subscription:"Premium"}
 ];
 
 const products = [
