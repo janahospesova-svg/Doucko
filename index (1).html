@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Veselé a důvěryhodné doučování pro 1.–5. třídu a přípravu na přijímačky.">
+  <title>Nauč se | Doučování, kurzy a materiály</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ================================================================
+       📘 NÁVOD K ÚPRAVĚ index.html
+       ================================================================
+
+       Tento soubor je HTML – tedy "kostra" webu.
+
+       ✏️ CO TADY MŮŽEŠ MĚNIT:
+       • texty nadpisů a odstavců
+       • texty tlačítek
+       • obrázky (src="...")
+       • alternativní text obrázků (alt="...")
+       • názvy jednotlivých sekcí
+       • pořadí některých částí stránky
+
+       🎨 VZHLED:
+       Barvy, velikosti, mezery a vzhled tlačítek upravuj ve style.css.
+
+       ⚙️ FUNKCE:
+       Košík, přihlášení, registrace, materiály, hodnocení a objednávky
+       obsluhuje app.js. ID a class názvy proto nemaž, pokud nevíš,
+       k čemu slouží.
+
+       💡 TIP:
+       Pokud chceš jen změnit text, uprav text mezi > a <.
+       Pokud chceš změnit obrázek, uprav hodnotu src="...".
+       Pokud chceš změnit odkaz, uprav hodnotu href="...".
+
+       PŘÍKLAD:
+       <h1>Původní nadpis</h1>
+       změň na:
+       <h1>Nový nadpis</h1>
+
+       ================================================================ -->
+
+  <!-- ============================================================
+     🧭 HTML STRUKTURA WEBU
+     Texty, které se často mění, najdeš hlavně v app.js.
+     Vzhled (barvy, velikosti, rozestupy...) upravuj ve style.css.
+     ============================================================ -->
+  <div id="toast" class="toast"></div>
+
+  <!-- 🧭 HLAVIČKA A HORNÍ MENU – tady upravuj logo, navigaci a horní tlačítka. -->
+  <header class="topbar">
+    <a class="brand" href="#home" data-route>
+      <span class="brand-mark">✏️</span>
+      <span>Chytrá<span>Třída</span></span>
+    </a>
+
+    <button class="mobile-menu" id="mobileMenu" aria-label="Otevřít menu">☰</button>
+
+    <nav id="mainNav">
+      <a href="#lectors" data-route>Lektoři</a>
+      <a href="#courses" data-route>Kurzy</a>
+      <a href="#products" data-route>Produkty</a>
+      <a href="#materials" data-route>Moje materiály</a>
+      <a href="#about" data-route>O nás</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="accountBtn" title="Účet">👤 <span id="accountLabel">Přihlásit</span></button>
+      <button class="cart-btn" id="cartBtn">🛒 <span>Košík</span><b id="cartCount">0</b></button>
+    </div>
+  </header>
+
+  <!-- 🏠 HLAVNÍ OBSAH STRÁNKY – jednotlivé části webu jsou uvnitř tohoto elementu. -->
+  <main>
+    <!-- SECTION_MARKER -->
+    <section id="home" class="page active">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Učení bez stresu • radost z pokroku</span>
+          <h1>Doučování, které děti <span>baví.</span></h1>
+          <p>Pomáháme školákům zvládnout základy, získat sebevědomí a připravit se na přijímačky. Tři lektoři, osobní přístup a materiály na jednom místě.</p>
+          <div class="hero-buttons">
+            <a class="btn primary" href="#courses" data-route>Prohlédnout kurzy</a>
+            <a class="btn secondary" href="#lectors" data-route>Poznat lektory</a>
+          </div>
+          <div class="trust-row">
+            <div><strong>1.–5.</strong><span>třída</span></div>
+            <div><strong>3</strong><span>lektoři</span></div>
+            <div><strong>4.9/5</strong><span>hodnocení</span></div>
+            <div><strong>100 %</strong><span>lidský přístup</span></div>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="floating-note note-one">⭐ 4,9 / 5</div>
+          <div class="floating-note note-two">📚 Materiály ke kurzu</div>
+          <div class="teacher-card">
+            <div class="teacher-avatar">👩‍🏫</div>
+            <div><b>Učení po našem</b><span>trpělivě • zábavně • srozumitelně</span></div>
+          </div>
+          <div class="big-book">📖</div>
+          <div class="doodle">✦</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div><span class="eyebrow">Proč Nauč se?</span><h2>Bezpečné místo pro učení</h2></div>
+          <p>Pro děti hravé. Pro rodiče přehledné.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card"><span>🎯</span><h3>Jasný cíl</h3><p>Kurzy mají konkrétní zaměření a děti přesně ví, co se naučí.</p></article>
+          <article class="feature-card"><span>💛</span><h3>Lidský přístup</h3><p>Nejde jen o známky. Budujeme sebevědomí a chuť učit se.</p></article>
+          <article class="feature-card"><span>🧩</span><h3>Praktické materiály</h3><p>Pracovní listy, procvičování a další obsah podle zakoupeného přístupu.</p></article>
+          <article class="feature-card"><span>🔐</span><h3>Přehled pro rodiče</h3><p>Účet, objednávky, předplatné a materiály máte na jednom místě.</p></article>
+        </div>
+      </section>
+
+      <section class="section soft">
+        <div class="section-heading"><div><span class="eyebrow">Oblíbené</span><h2>Vyberte si podle cíle</h2></div><a class="text-link" href="#courses" data-route>Všechny kurzy →</a></div>
+        <div id="homeCourses" class="card-grid"></div>
+      </section>
+
+      <section class="section">
+        <div class="parent-quote">
+          <div class="quote-mark">“</div>
+          <p>Chceme, aby rodič po přihlášení okamžitě věděl, co dítě dělá, co má k dispozici a co si objednal.</p>
+<b>Koncept ChytréTřídy</b>
+        </div>
+      </section>
+    </section>
+
+    <!-- 👩‍🏫 LEKTOŘI – upravuj nadpis a úvod zde; profily lektorů se vykreslují z app.js. -->
+    <section id="lectors" class="page">
+      <div class="page-header"><span class="eyebrow">Náš tým</span><h1>Seznamte se s lektory</h1><p>Tři sedmáci, kteří umí látku vysvětlit lidsky a srozumitelně. U každého lektora si můžete otevřít podrobnosti a po zkušenosti přidat vlastní hodnocení.</p></div>
+      <div id="lectorsGrid" class="lector-grid"></div>
+    </section>
+
+    <!-- 📚 KURZY – text nadpisu můžeš upravit zde; jednotlivé kurzy se vykreslují z app.js. -->
+    <section id="courses" class="page">
+      <div class="page-header"><span class="eyebrow">Kurzy</span><h1>Vyberte kurz pro svého školáka</h1><p>Každý kurz má vlastní přístup a navazující materiály. Hodnocení se zobrazí až po přidání skutečných recenzí.</p></div>
+      <div class="filter-row">
+        <button class="filter active" data-filter="all">Vše</button>
+        <button class="filter" data-filter="1-5">1.–5. třída</button>
+        <button class="filter" data-filter="prijimacky">Přijímačky</button>
+      </div>
+      <div id="coursesGrid" class="card-grid"></div>
+    </section>
+
+    <!-- 🛍️ PRODUKTY – texty této sekce můžeš upravit zde; produkty se vykreslují z app.js. -->
+    <section id="products" class="page">
+      <div class="page-header"><span class="eyebrow">Obchod</span><h1>Produkty pro domácí procvičování</h1><p>Objednejte si fyzické nebo digitální materiály až domů.</p></div>
+      <div class="shop-info"><span>🚚</span><div><b>Doručení až domů</b><p>Po objednávce se vám ozveme s potvrzením a doručením.</p></div></div>
+      <div id="productsGrid" class="product-grid"></div>
+    </section>
+
+    <!-- 📖 MÉ MATERIÁLY – přístup a obsah řídí app.js podle předplatného. -->
+    <section id="materials" class="page">
+      <div class="page-header"><span class="eyebrow">Vaše předplatné</span><h1>Moje materiály</h1><p>Obsah se automaticky přizpůsobuje tomu, jaké předplatné máte.</p></div>
+      <div id="materialsContent"></div>
+    </section>
+
+    <!-- ℹ️ O NÁS – tady upravuj text o vašem doučování. -->
+    <section id="about" class="page">
+      <div class="page-header"><span class="eyebrow">O nás</span><h1>Proč vznikla Nauč se?</h1></div>
+      <div class="about-layout">
+        <div class="about-paper">
+          <h2>Učení nemusí být otrava. ✨</h2>
+          <p>Nauč se je malý projekt tří studentů, kteří chtějí mladším školákům ukázat, že matematika, čeština i příprava na přijímačky mohou být zvládnutelné a dokonce zábavné.</p>
+          <p>Na webu najdete lekce, kurzy a materiály. Rodiče zase získají přehled o objednávkách, zakoupeném obsahu a předplatném.</p>
+        </div>
+        <div class="about-stats">
+          <div><strong>3</strong><span>lektoři</span></div><div><strong>1.–5.</strong><span>třída</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="modal"></div>
+  </div>
+
+  <!-- 🦶 PATIČKA – tady upravuj spodní část webu, kontakty a doplňkové odkazy. -->
+  <footer>
+    <div class="footer-brand"><span class="brand-mark">✏️</span><b>Nauč se</b><p>Učení, které dává smysl.</p></div>
+    <div><b>Pro rodiče</b><a href="#courses" data-route>Kurzy</a><a href="#products" data-route>Produkty</a><a href="#materials" data-route>Materiály</a></div>
+    <div><b>Informace</b><a href="#about" data-route>O nás</a><a href="#" onclick="openTerms();return false">Obchodní podmínky</a><a href="#" onclick="showToast('Kontakt: nastav si e-mail v app.js.');return false">Kontakt</a></div>
+    <div><b>Bezpečí</b><p>🔒 Účet a objednávky jsou oddělené od veřejných recenzí.</p></div>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!-- ================================================================
+       🔚 KONEC HTML
+       Pokud chceš přidat úplně novou sekci, nejlepší je zkopírovat
+       podobnou existující sekci a změnit její texty/classy.
+       Funkční ID (např. pro modály nebo tlačítka) nemaž bez úpravy app.js.
+       ================================================================ -->
+</body>
+</html>

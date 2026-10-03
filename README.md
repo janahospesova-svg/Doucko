@@ -49,7 +49,7 @@ ne běžné heslo účtu.
 ## Přehled objednávek
 Po spuštění serveru otevři:
 
-`http://localhost:3000/admin/`
+`http://localhost:3000/sprava/`
 
 Zadej `ADMIN_KEY` z `.env`. Tato stránka načte objednávky z databáze.
 
