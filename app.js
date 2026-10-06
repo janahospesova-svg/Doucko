@@ -22,18 +22,19 @@ Tato verze je stále DEMO: účty a další data používají localStorage.
 const ORDER_EMAIL = "objednavky@mojedoucovani.cz";
 
 const lecturers = [
-  {id:1,name:"Mara",emoji:"👨‍🏫",bio:"Matematika a čeština pro mladší školáky. Vysvětluje krok za krokem a bez zbytečného stresu.",tags:["Matematika","Čeština","1.–5. třída"]},
-  {id:2,name:"Vera",emoji:"👩‍🏫",bio:"Pomáhá dětem s domácími úkoly, čtením a základy angličtiny. Ráda používá hry a příklady z běžného života.",tags:["Čeština","Angličtina","1.–5. třída"]},
-  {id:3,name:"Jana",emoji:"🧑‍🏫",bio:"Specializuje se na matematiku a systematickou přípravu na přijímací zkoušky.",tags:["Matematika","Přijímačky","Procvičování"]}
+  {id:1,name:"Maru",emoji:"👩‍🏫",bio:"Matematika a čeština pro mladší školáky. Vysvětluje krok za krokem a bez zbytečného stresu.",tags:["Matematika","Čeština","1.–5. třída"]},
+  {id:2,name:"Veru",emoji:"👩‍🏫",bio:"Pomáhá dětem s domácími úkoly, čtením a základy angličtiny. Ráda používá hry a příklady z běžného života.",tags:["Čeština","Angličtina","1.–5. třída"]},
+  {id:3,name:"Jana",emoji:"🧑‍🏫",bio:"Specializuje se na matematiku a systematickou přípravu na přijímací zkoušky.",tags:["Matematika","Přijímačky","Procvičování"]},
+  {id:4,name:"Amy",emoji:"👩‍🏫",bio:"Pomáhá s angličtinou a češtinou a vede žáky k tomu, aby se nebáli zeptat.",tags:["Angličtina","Čeština","1.–5. třída"]}
 ];
 
 const courses = [
-  {id:"c1",type:"1-5",title:"Matematika 1.–5. třída",desc:"Základy počítání, slovní úlohy, geometrie a procvičování.",price:199,emoji:"➗",rating:0,reviews:0,lecturer:"Mara",subscription:"Start"},
-  {id:"c2",type:"1-5",title:"Čeština hravě",desc:"Čtení, pravopis, větná stavba a zábavné procvičování.",price:199,emoji:"📚",rating:0,reviews:0,lecturer:"Vera",subscription:"Start"},
-  {id:"c3",type:"1-5",title:"Angličtina pro školáky",desc:"Základní slovíčka, věty a krátká konverzace pro děti.",price:249,emoji:"🇬🇧",rating:0,reviews:0,lecturer:"Vera",subscription:"Plus"},
+  {id:"c1",type:"1-5",title:"Matematika 1.–5. třída",desc:"Základy počítání, slovní úlohy, geometrie a procvičování.",price:199,emoji:"➗",rating:0,reviews:0,lecturer:"Maru",subscription:"Start"},
+  {id:"c2",type:"1-5",title:"Čeština hravě",desc:"Čtení, pravopis, větná stavba a zábavné procvičování.",price:199,emoji:"📚",rating:0,reviews:0,lecturer:"Veru",subscription:"Start"},
+  {id:"c3",type:"1-5",title:"Angličtina pro školáky",desc:"Základní slovíčka, věty a krátká konverzace pro děti.",price:249,emoji:"🇬🇧",rating:0,reviews:0,lecturer:"Veru",subscription:"Plus"},
   {id:"c4",type:"prijimacky",title:"Přijímačky – matematika",desc:"Strukturované procvičování typových úloh a strategie řešení.",price:399,emoji:"🎯",rating:0,reviews:0,lecturer:"Jana",subscription:"Plus"},
-  {id:"c5",type:"prijimacky",title:"Přijímačky – čeština",desc:"Porozumění textu, gramatika a systematická příprava.",price:399,emoji:"📝",rating:0,reviews:0,lecturer:"Vera",subscription:"Plus"},
-  {id:"c6",type:"prijimacky",title:"Kompletní přijímačkový balíček",desc:"Matematika + čeština + bonusové materiály a kontrolní testy.",price:699,emoji:"🏆",rating:0,reviews:0,lecturer:"Jana + Vera",subscription:"Premium"}
+  {id:"c5",type:"prijimacky",title:"Přijímačky – čeština",desc:"Porozumění textu, gramatika a systematická příprava.",price:399,emoji:"📝",rating:0,reviews:0,lecturer:"Veru",subscription:"Plus"},
+  {id:"c6",type:"prijimacky",title:"Kompletní přijímačkový balíček",desc:"Matematika + čeština + bonusové materiály a kontrolní testy.",price:699,emoji:"🏆",rating:0,reviews:0,lecturer:"Jana + Veru",subscription:"Premium"}
 ];
 
 const products = [
@@ -129,9 +130,76 @@ function courseCard(c){
       <div class="rating">${rr.count ? `<span>${stars(rr.rating)}</span><small>${rr.rating.toFixed(1).replace(".",",")} • ${rr.count} hodnocení</small>` : `<small class="muted">⭐ Zatím bez hodnocení</small>`}</div>
       <small class="muted">Lektor: <b>${c.lecturer}</b> • Přístup: <b>${c.subscription}</b></small>
       <div class="price-row"><div class="price"><strong>${eur(c.price)}</strong><small>vč. DPH • měsíčně</small></div></div>
-      <div class="card-actions"><button class="small-btn light" onclick="openCourse('${c.id}')">Recenze</button><button class="small-btn primary" onclick="addToCart('${c.id}','course')">Přidat do košíku</button></div>
+      <div class="card-actions"><button class="small-btn light" onclick="openCourse('${c.id}')">Recenze</button><button class="small-btn light" onclick="openReservation('${c.id}')">📅 Termín</button><button class="small-btn primary" onclick="addToCart('${c.id}','course')">Přidat do košíku</button></div>
     </div>
   </article>`
+}
+
+
+async function openReservation(courseId){
+  const course=courses.find(c=>c.id===courseId);
+  if(!course)return;
+  showModal(`<button class="modal-close" onclick="closeModal()">×</button>
+    <h2>📅 Rezervace doučování</h2>
+    <p><b>${course.title}</b></p>
+    <p class="muted">Vyberte termín. Každý termín má nejvýše 5 míst.</p>
+    <div id="reservationSlots"><p>Načítám volné termíny…</p></div>`);
+  try{
+    const r=await fetch(`/api/slots?courseId=${encodeURIComponent(course.id)}`);
+    const slots=await r.json();
+    if(!r.ok)throw new Error(slots.error||"Termíny se nepodařilo načíst.");
+    const box=document.getElementById("reservationSlots");
+    if(!slots.length){
+      box.innerHTML='<div class="no-access"><div style="font-size:40px">📭</div><h3>Momentálně nejsou vypsané volné termíny.</h3><p class="muted">Zkuste to prosím později.</p></div>';
+      return;
+    }
+    box.innerHTML=`<div class="reservation-slot-list">${slots.map(s=>`
+      <button class="reservation-slot" onclick="openReservationForm(${s.id})">
+        <span><b>${new Date(s.startsAt).toLocaleString("cs-CZ",{dateStyle:"full",timeStyle:"short"})}</b><small>Lektor: ${s.lecturer}</small></span>
+        <strong>${s.available}/${s.capacity} míst</strong>
+      </button>`).join("")}</div>`;
+  }catch(e){
+    document.getElementById("reservationSlots").innerHTML=`<p class="error">${e.message}</p>`;
+  }
+}
+
+async function openReservationForm(slotId){
+  try{
+    const r=await fetch("/api/slots");
+    const slots=await r.json();
+    const slot=slots.find(s=>s.id===slotId);
+    if(!slot)throw new Error("Tento termín už není dostupný.");
+    const name=state.user?.name||"";
+    const email=state.user?.email||"";
+    showModal(`<button class="modal-close" onclick="closeModal()">×</button>
+      <h2>📝 Rezervace termínu</h2>
+      <p><b>${slot.courseTitle}</b><br>${new Date(slot.startsAt).toLocaleString("cs-CZ",{dateStyle:"full",timeStyle:"short"})}<br>Lektor: <b>${slot.lecturer}</b></p>
+      <form onsubmit="submitReservation(event,${slot.id})" class="form-grid">
+        <label>Jméno a příjmení<input name="name" value="${name.replace(/"/g,"&quot;")}" required></label>
+        <label>E-mail<input type="email" name="email" value="${email.replace(/"/g,"&quot;")}" required></label>
+        <label>Telefon<input name="phone"></label>
+        <button class="btn primary full" type="submit">Rezervovat místo</button>
+      </form>`);
+  }catch(e){showToast(e.message)}
+}
+
+async function submitReservation(e,slotId){
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  try{
+    const r=await fetch("/api/reservations",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({slotId,name:fd.get("name"),email:fd.get("email"),phone:fd.get("phone")})
+    });
+    const data=await r.json();
+    if(!r.ok)throw new Error(data.error||"Rezervace se nepodařila vytvořit.");
+    showModal(`<button class="modal-close" onclick="closeModal()">×</button>
+      <div class="success-box"><div style="font-size:55px">✅</div>
+      <h2>Rezervace je hotová</h2>
+      <p>Číslo rezervace: <b>${data.reservationNumber}</b></p>
+      <p>Na váš e-mail vám pošleme informace k připojení, jakmile administrátor doplní Google Meet.</p>
+      <button class="btn primary" onclick="closeModal()">Hotovo</button></div>`);
+  }catch(err){showToast(err.message)}
 }
 
 function renderHome(){document.getElementById("homeCourses").innerHTML=courses.slice(0,3).map(courseCard).join("")}
@@ -139,6 +207,17 @@ function renderCourses(filter="all"){
   document.getElementById("coursesGrid").innerHTML=courses.filter(c=>filter==="all"||c.type===filter).map(courseCard).join("");
   document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===filter))
 }
+function renderReservationCourses(){
+  const box=document.getElementById("reservationCourses");
+  if(!box)return;
+  box.innerHTML=courses.map(c=>`<article class="course-card">
+    <div class="course-cover"><span class="badge">${c.type==="prijimacky"?"PŘIJÍMAČKY":"1.–5. TŘÍDA"}</span><span>${c.emoji}</span></div>
+    <div class="course-body"><h3>${c.title}</h3><p>${c.desc}</p>
+    <small class="muted">Kurz vede: <b>${c.lecturer}</b></small>
+    <div class="card-actions"><button class="small-btn primary" onclick="openReservation('${c.id}')">📅 Vybrat termín</button></div>
+    </div></article>`).join("");
+}
+
 function renderLecturers(){
   document.getElementById("lectorsGrid").innerHTML=lecturers.map(l=>{
     const rr=calcLecturerRating(l.id);
@@ -379,6 +458,24 @@ function submitLecturerReview(e,id){
   showToast("Děkujeme za hodnocení lektora!");
 }
 
+
+async function refreshCourseReviewsInModal(id){
+  try{
+    const response = await fetch(`/api/reviews?courseId=${encodeURIComponent(id)}`);
+    const data = await response.json();
+    if(!response.ok) throw new Error(data.error || "Recenze se nepodařilo načíst.");
+    const list = document.querySelector("#modal .review-list");
+    if(!list) return;
+    const reviews = Array.isArray(data.reviews) ? data.reviews : [];
+    list.innerHTML = reviews.length
+      ? reviews.map(r => `<div class="review"><div class="review-head"><b>${escapeHtml(r.authorName)}</b><span class="review-stars">${stars(Number(r.rating))}</span></div><p style="margin:5px 0">${escapeHtml(r.text)}</p><small>${escapeHtml(new Date(r.createdAt).toLocaleDateString("cs-CZ"))}</small></div>`).join("")
+      : `<div class="review"><p>Zatím zde nejsou žádné recenze. Buďte první!</p></div>`;
+  }catch(err){
+    const list = document.querySelector("#modal .review-list");
+    if(list) list.innerHTML = `<div class="review"><p>${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
 function openCourse(id){
   const c=courses.find(x=>x.id===id), rr=calcCourseRating(c), reviews=allReviews(id);
   showModal(`<button class="modal-close" onclick="closeModal()">×</button><span class="eyebrow">${c.type==="prijimacky"?"PŘIJÍMAČKY":"1.–5. TŘÍDA"}</span><h2>${c.emoji} ${c.title}</h2><p class="muted">${c.desc}</p>
@@ -386,13 +483,36 @@ function openCourse(id){
     <div class="review-list">${reviews.length?reviews.map(r=>`<div class="review"><div class="review-head"><b>${escapeHtml(r.name)}</b><span class="review-stars">${stars(r.rating)}</span></div><p style="margin:5px 0">${escapeHtml(r.text)}</p><small>Ověřený uživatel webu</small></div>`).join(""):`<div class="review"><p>Zatím zde nejsou vaše vlastní recenze. Buďte první!</p></div>`}</div>
     ${state.user?`<form class="form" style="margin-top:18px" onsubmit="submitReview(event,'${c.id}')"><label>Vaše hodnocení<select name="rating"><option value="5">★★★★★ – 5</option><option value="4">★★★★☆ – 4</option><option value="3">★★★☆☆ – 3</option><option value="2">★★☆☆☆ – 2</option><option value="1">★☆☆☆☆ – 1</option></select></label><label>Recenze<textarea name="text" required rows="3" placeholder="Co se vám na kurzu líbilo?"></textarea></label><button class="btn primary">Přidat recenzi</button></form>`:`<button class="btn primary full" style="margin-top:18px" onclick="closeModal();openAuth('login')">Přihlásit se pro přidání recenze</button>`}
     <button class="btn secondary full" style="margin-top:10px" onclick="addToCart('${c.id}','course')">Přidat kurz do košíku • ${eur(c.price)}</button>`)
+  refreshCourseReviewsInModal(id);
 }
-function submitReview(e,id){e.preventDefault();const fd=new FormData(e.target);if(!state.reviews[id])state.reviews[id]=[];state.reviews[id].push({name:state.user.name,rating:Number(fd.get("rating")),text:fd.get("text")});save();openCourse(id);renderCourses();renderHome();showToast("Děkujeme za recenzi!")}
+
+async function submitReview(e,id){
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  try{
+    const response = await fetch("/api/reviews", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        courseId:id,
+        authorName:state.user?.name || "Uživatel",
+        rating:Number(fd.get("rating")),
+        text:String(fd.get("text") || "").trim()
+      })
+    });
+    const data = await response.json();
+    if(!response.ok) throw new Error(data.error || "Recenzi se nepodařilo odeslat.");
+    await refreshCourseReviewsInModal(id);
+    showToast("Děkujeme za recenzi!");
+  }catch(err){
+    showToast(err.message);
+  }
+}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function openTerms(){showModal(`<button class="modal-close" onclick="closeModal()">×</button><h2>Obchodní podmínky – vzor</h2><p class="muted">Toto je pouze návrh textu pro demo. Před spuštěním skutečného e-shopu je potřeba doplnit skutečné identifikační údaje, podmínky plateb, dopravy, reklamací, odstoupení od smlouvy a zásady ochrany osobních údajů.</p><p>Pro reálný provoz doporučujeme právní kontrolu podmínek a napojení zabezpečené autentizace, databáze a platební brány.</p>`)}
 function route(){
   const id=(location.hash||"#home").slice(1)||"home";document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));window.scrollTo({top:0,behavior:"smooth"});
-  if(id==="materials")renderMaterials();if(id==="courses")renderCourses();if(id==="products")renderProducts();if(id==="lectors")renderLecturers();
+  if(id==="materials")renderMaterials();if(id==="courses")renderCourses();if(id==="products")renderProducts();if(id==="lectors")renderLecturers();if(id==="reservations")renderReservationCourses();
 }
 document.addEventListener("click",e=>{const a=e.target.closest("[data-route]");if(a){document.getElementById("mainNav").style.display="";}})
 document.getElementById("accountBtn").onclick=account;document.getElementById("cartBtn").onclick=openCart;
@@ -400,4 +520,91 @@ document.getElementById("mobileMenu").onclick=()=>{const n=document.getElementBy
 document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>renderCourses(b.dataset.filter));
 window.addEventListener("hashchange",route);
 
-renderHome();renderCourses();renderProducts();renderLecturers();renderMaterials();updateHeader();route();
+renderHome();renderCourses();renderProducts();renderLecturers();renderMaterials();renderReservationCourses();updateHeader();route();
+
+
+let activeReviewCourseId = null;
+
+function escapeReviewHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+function renderReviewList(reviews) {
+  const list = document.getElementById("reviewList");
+  const summary = document.getElementById("courseReviewsSummary");
+  if (!list || !summary) return;
+
+  if (!reviews.length) {
+    list.innerHTML = '<div class="review-empty">Zatím tu není žádná recenze. Buď první!</div>';
+    summary.textContent = "Zatím bez hodnocení.";
+    return;
+  }
+
+  const avg = reviews.reduce((s,r) => s + Number(r.rating || 0), 0) / reviews.length;
+  summary.textContent = `Průměr ${avg.toFixed(1).replace(".",",")} / 5 · ${reviews.length} ${reviews.length === 1 ? "recenze" : "recenzí"}`;
+
+  list.innerHTML = reviews.map(r => {
+    const rating = Math.max(1, Math.min(5, Number(r.rating) || 1));
+    const stars = "★".repeat(rating) + "☆".repeat(5-rating);
+    const date = new Date(r.createdAt);
+    const dateText = Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString("cs-CZ");
+    return `<article class="review-card">
+      <div class="review-card-top">
+        <span class="review-author">${escapeReviewHtml(r.authorName)}</span>
+        <span class="review-stars">${stars}</span>
+      </div>
+      <div class="review-date">${escapeReviewHtml(dateText)}</div>
+      <p class="review-text">${escapeReviewHtml(r.text)}</p>
+    </article>`;
+  }).join("");
+}
+
+async function loadCourseReviews(courseId) {
+  const box = document.getElementById("courseReviews");
+  const list = document.getElementById("reviewList");
+  if (!box || !list) return;
+  activeReviewCourseId = courseId;
+  box.hidden = false;
+  list.innerHTML = '<div class="review-empty">Načítám recenze…</div>';
+
+  try {
+    const response = await fetch(`/api/reviews?courseId=${encodeURIComponent(courseId)}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Recenze se nepodařilo načíst.");
+    renderReviewList(Array.isArray(data.reviews) ? data.reviews : []);
+  } catch (e) {
+    list.innerHTML = `<div class="review-empty">${escapeReviewHtml(e.message)}</div>`;
+  }
+}
+
+async function submitCourseReview(event) {
+  event.preventDefault();
+  const message = document.getElementById("reviewMessage");
+  try {
+    const response = await fetch("/api/reviews", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        courseId: activeReviewCourseId,
+        authorName: document.getElementById("reviewAuthorName").value.trim(),
+        rating: Number(document.getElementById("reviewRating").value),
+        text: document.getElementById("reviewText").value.trim()
+      })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Recenzi se nepodařilo odeslat.");
+    document.getElementById("reviewText").value = "";
+    message.textContent = "Děkujeme! Recenze byla zveřejněna.";
+    await loadCourseReviews(activeReviewCourseId);
+  } catch (e) {
+    message.textContent = e.message;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("reviewForm");
+  if (form) form.addEventListener("submit", submitCourseReview);
+});
+window.openCourseReviews = loadCourseReviews;

@@ -23,6 +23,7 @@ h1,h2,h3,.brand{font-family:"Baloo 2",sans-serif}h1,h2,h3,p{margin-top:0}a{color
 button,input,textarea,select{font:inherit}button{cursor:pointer}
 .topbar{height:78px;background:rgba(255,253,248,.92);backdrop-filter:blur(14px);display:flex;align-items:center;gap:26px;padding:0 max(22px,calc((100% - 1180px)/2));position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(233,231,223,.7)}
 .brand{font-size:25px;font-weight:800;display:flex;align-items:center;gap:9px;white-space:nowrap}.brand>span:last-child span{color:var(--blue)}
+.brand-logo{width:50px;height:50px;object-fit:contain;border-radius:14px;display:block}
 .brand-mark{width:42px;height:42px;display:grid;place-items:center;background:var(--yellow);border-radius:13px;transform:rotate(-5deg)}
 nav{display:flex;gap:20px;margin-left:auto}nav a{font-weight:800;color:#566078;font-size:14px}nav a:hover{color:var(--blue)}
 .header-actions{display:flex;gap:9px}.icon-btn,.cart-btn{border:1px solid var(--line);background:white;border-radius:13px;padding:10px 13px;font-weight:800;color:var(--ink)}.cart-btn{display:flex;gap:7px;align-items:center}.cart-btn b{background:var(--blue);color:#fff;border-radius:50%;min-width:22px;height:22px;display:grid;place-items:center;font-size:12px}.mobile-menu{display:none;border:0;background:none;font-size:25px}
@@ -49,7 +50,7 @@ main{min-height:70vh}.page{display:none}.page.active{display:block}.hero,.sectio
 .toast{position:fixed;right:20px;bottom:20px;background:#172033;color:#fff;padding:13px 17px;border-radius:14px;box-shadow:var(--shadow);z-index:100;transform:translateY(120px);opacity:0;transition:.25s;font-weight:800}.toast.show{transform:translateY(0);opacity:1}
 footer{background:#172033;color:#dce2f0;padding:50px max(22px,calc((100% - 1136px)/2));display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:35px}footer a,footer p{display:block;color:#aeb8ca;font-size:13px;margin:9px 0}footer b{color:#fff}.footer-brand{font-size:22px}.footer-brand p{font-size:13px}
 @media(max-width:900px){nav{display:none}.mobile-menu{display:block;margin-left:auto}.header-actions{margin-left:0}.topbar{gap:10px}.hero{grid-template-columns:1fr}.hero-art{min-height:370px}.feature-grid,.card-grid,.product-grid,.lector-grid{grid-template-columns:1fr 1fr}.about-layout{grid-template-columns:1fr}footer{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.topbar{height:68px}.brand{font-size:21px}.brand-mark{width:36px;height:36px}.header-actions .icon-btn span,.cart-btn span{display:none}.hero{padding-top:40px}.hero h1{font-size:47px}.trust-row{gap:15px;flex-wrap:wrap}.section{padding:45px 18px}.section-heading{display:block}.section-heading h2{font-size:31px;margin-bottom:7px}.feature-grid,.card-grid,.product-grid,.lector-grid,.material-grid{grid-template-columns:1fr}.page-header h1{font-size:39px}.page-header{padding-top:45px}.filter-row{overflow:auto}.hero-art{min-height:320px}.teacher-card{width:270px}.floating-note{font-size:11px}.form-row{grid-template-columns:1fr}.subscription-card{display:block}.subscription-card .btn{margin-top:15px}footer{grid-template-columns:1fr;padding:40px 22px}}
+@media(max-width:600px){.topbar{height:68px}.brand{font-size:21px}.brand-logo{width:42px;height:42px}.brand-mark{width:36px;height:36px}.header-actions .icon-btn span,.cart-btn span{display:none}.hero{padding-top:40px}.hero h1{font-size:47px}.trust-row{gap:15px;flex-wrap:wrap}.section{padding:45px 18px}.section-heading{display:block}.section-heading h2{font-size:31px;margin-bottom:7px}.feature-grid,.card-grid,.product-grid,.lector-grid,.material-grid{grid-template-columns:1fr}.page-header h1{font-size:39px}.page-header{padding-top:45px}.filter-row{overflow:auto}.hero-art{min-height:320px}.teacher-card{width:270px}.floating-note{font-size:11px}.form-row{grid-template-columns:1fr}.subscription-card{display:block}.subscription-card .btn{margin-top:15px}footer{grid-template-columns:1fr;padding:40px 22px}}
 
 
 /* ================================================================
@@ -72,3 +73,12 @@ footer{background:#172033;color:#dce2f0;padding:50px max(22px,calc((100% - 1136p
 .lector-card .small-btn {
   margin-top: 12px;
 }
+
+/* Rezervační systém */
+.reservation-slot-list{display:grid;gap:12px;margin-top:18px}
+.reservation-slot{display:flex;justify-content:space-between;align-items:center;gap:18px;width:100%;text-align:left;padding:16px;border:1px solid #ddd;border-radius:14px;background:#fff;cursor:pointer}
+.reservation-slot:hover{transform:translateY(-1px);box-shadow:0 5px 18px #00000010}
+.reservation-slot span{display:grid;gap:5px}
+.reservation-slot small{color:#666}
+.success-box{text-align:center;padding:12px 4px}
+.error{color:#b42318}

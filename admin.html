@@ -3,50 +3,125 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nauč se – objednávky</title>
+<title>Nauč se – administrace</title>
 <style>
 body{font-family:Arial,sans-serif;background:#f7f7fb;margin:0;padding:24px;color:#20232a}
-.wrap{max-width:1100px;margin:auto}.card{background:white;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 5px 20px #00000012}
-input,button{padding:11px;border-radius:10px;border:1px solid #ccc}button{cursor:pointer}
+.wrap{max-width:1200px;margin:auto}.card{background:white;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 5px 20px #00000012}
+input,select,button{padding:11px;border-radius:10px;border:1px solid #ccc}button{cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;border-bottom:1px solid #eee;vertical-align:top}
 .small{color:#666;font-size:13px}.error{color:#b42318}.ok{color:#067647}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.danger{background:#fff0f0}.muted{color:#666}
+.slot{border:1px solid #eee;border-radius:14px;padding:14px;margin:10px 0;background:#fff}
+.slot.inactive{opacity:.6}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef3ff;font-size:12px}
+@media(max-width:700px){body{padding:10px}table{font-size:13px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>📦 Objednávky Nauč se</h1>
-  <div class="card">
-    <label>Admin klíč <input id="key" type="password" style="width:320px"></label>
-    <button onclick="loadOrders()">Načíst objednávky</button>
-    <span id="status"></span>
-  </div>
-  <div class="card">
-    <table>
-      <thead><tr><th>Objednávka</th><th>Zákazník</th><th>Adresa</th><th>Položky</th><th>Celkem</th><th>E-mail</th></tr></thead>
-      <tbody id="orders"></tbody>
-    </table>
-  </div>
+<h1>⚙️ Nauč se – administrace</h1>
+<div class="card">
+<label>Admin klíč <input id="key" type="password" style="width:320px;max-width:90%"></label>
+<button onclick="loadAll()">Načíst data</button>
+<span id="status"></span>
 </div>
+
+<div class="card">
+<h2>📅 Termíny doučování</h2>
+<p class="muted">Zákazníci mohou rezervovat pouze aktivní termíny. Výchozí kapacita je 5 míst.</p>
+<form id="slotForm" onsubmit="createSlot(event)" class="grid">
+<input id="courseId" placeholder="ID kurzu, např. c1" required>
+<input id="courseTitle" placeholder="Předmět / kurz" required>
+<select id="lecturer" required><option value="">Lektor</option><option>Maru</option><option>Veru</option><option>Jana</option><option>Amy</option></select>
+<input id="startsAt" type="datetime-local" required>
+<input id="capacity" type="number" min="1" max="20" value="5" required>
+<button type="submit">➕ Přidat termín</button>
+</form>
+<div id="slots"></div>
+</div>
+
+<div class="card">
+<h2>📝 Rezervace</h2>
+<p class="muted">Doplň Google Meet odkaz a heslo/kód. Po uložení se údaje automaticky odešlou zákazníkovi.</p>
+<div id="reservations"></div>
+</div>
+
+<div class="card">
+<h2>📦 Objednávky</h2>
+<div id="orders"></div>
+</div>
+</div>
+
 <script>
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-async function loadOrders(){
- const status=document.getElementById("status");
+let adminKey="";
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const money=v=>new Intl.NumberFormat("cs-CZ",{style:"currency",currency:"CZK",maximumFractionDigits:0}).format(v);
+function headers(){return {"x-admin-key":adminKey,"Content-Type":"application/json"}}
+async function api(url,opts={}){const r=await fetch(url,{...opts,headers:{...headers(),...(opts.headers||{})}});const d=await r.json();if(!r.ok)throw new Error(d.error||"Chyba");return d}
+async function loadAll(){
+ adminKey=document.getElementById("key").value;
+ if(!adminKey){status.textContent=" Zadej admin klíč.";return}
  try{
-   const r=await fetch("/api/orders",{headers:{"x-admin-key":document.getElementById("key").value}});
-   const data=await r.json();
-   if(!r.ok) throw new Error(data.error||"Chyba");
-   document.getElementById("orders").innerHTML=data.map(o=>`
-    <tr>
-      <td><b>${esc(o.order_number)}</b><div class="small">${new Date(o.created_at).toLocaleString("cs-CZ")}</div></td>
-      <td>${esc(o.customer_name)}<div class="small">${esc(o.customer_email)}<br>${esc(o.customer_phone)}</div></td>
-      <td>${esc(o.street)}<br>${esc(o.zip)} ${esc(o.city)}<div class="small">${esc(o.note)}</div></td>
-      <td>${o.items.map(i=>`${esc(i.name)} × ${i.quantity}`).join("<br>")}</td>
-      <td><b>${new Intl.NumberFormat("cs-CZ",{style:"currency",currency:"CZK",maximumFractionDigits:0}).format(o.total)}</b></td>
-      <td>${o.email_sent ? '<span class="ok">✓ odesláno</span>' : '<span class="error">✗ neodesláno</span>'}</td>
-    </tr>`).join("");
-   status.textContent=` Načteno ${data.length} objednávek.`;
-   status.className="ok";
+  const [slots,reservations,orders]=await Promise.all([api("/api/admin/slots"),api("/api/admin/reservations"),api("/api/orders")]);
+  renderSlots(slots);renderReservations(reservations);renderOrders(orders);
+  status.textContent=" ✓ Data načtena.";status.className="ok";
  }catch(e){status.textContent=" "+e.message;status.className="error"}
+}
+async function createSlot(e){
+ e.preventDefault();
+ try{
+  await api("/api/admin/slots",{method:"POST",body:JSON.stringify({
+   courseId:courseId.value,courseTitle:courseTitle.value,lecturer:lecturer.value,
+   startsAt:new Date(startsAt.value).toISOString(),capacity:Number(capacity.value),active:true
+  })});
+  e.target.reset();capacity.value=5;await loadAll();
+ }catch(err){alert(err.message)}
+}
+async function toggleSlot(id,active){
+ try{await api("/api/admin/slots/"+id,{method:"PATCH",body:JSON.stringify({active:!active})});await loadAll()}catch(e){alert(e.message)}
+}
+async function deleteSlot(id){
+ if(!confirm("Opravdu smazat tento termín? Termín s rezervacemi smazat nelze."))return;
+ try{await api("/api/admin/slots/"+id,{method:"DELETE"});await loadAll()}catch(e){alert(e.message)}
+}
+function renderSlots(rows){
+ slots.innerHTML=rows.length?rows.map(s=>`
+ <div class="slot ${s.active?"":"inactive"}">
+ <b>${esc(s.course_title)}</b> · ${esc(s.lecturer)}
+ <div>${new Date(s.starts_at).toLocaleString("cs-CZ")} · <span class="pill">${s.reserved}/${s.capacity} obsazeno</span></div>
+ <div class="actions" style="margin-top:8px">
+ <button onclick="toggleSlot(${s.id},${!!s.active})">${s.active?"❌ Vypnout":"✅ Zapnout"}</button>
+ ${s.reserved===0?`<button class="danger" onclick="deleteSlot(${s.id})">🗑️ Smazat</button>`:""}
+ </div>
+ </div>`).join(""):"<p class='muted'>Zatím nemáš žádné termíny.</p>";
+}
+async function sendMeet(id){
+ const link=document.getElementById("meetLink_"+id).value.trim();
+ const pass=document.getElementById("meetPass_"+id).value.trim();
+ if(!link){alert("Zadej Google Meet odkaz.");return}
+ try{const d=await api("/api/admin/reservations/"+id+"/meet",{method:"PATCH",body:JSON.stringify({meetLink:link,meetPassword:pass})});alert(d.emailSent?"Meet údaje byly uloženy a e-mail odeslán.":(d.warning||"Uloženo."));await loadAll()}catch(e){alert(e.message)}
+}
+function renderReservations(rows){
+ reservations.innerHTML=rows.length?rows.map(r=>`
+ <div class="slot">
+ <b>${esc(r.reservation_number)}</b> · ${esc(r.course_title)} · ${esc(r.lecturer)}
+ <div>${new Date(r.starts_at).toLocaleString("cs-CZ")}</div>
+ <div class="small">${esc(r.customer_name)} · ${esc(r.customer_email)}${r.customer_phone?" · "+esc(r.customer_phone):""}</div>
+ <div class="grid" style="margin-top:10px">
+ <input id="meetLink_${r.id}" placeholder="Google Meet odkaz" value="${esc(r.meet_link||"")}">
+ <input id="meetPass_${r.id}" placeholder="Heslo / kód" value="${esc(r.meet_password||"")}">
+ <button onclick="sendMeet(${r.id})">📧 Uložit a poslat zákazníkovi</button>
+ </div>
+ <div class="small">${r.meet_sent?'<span class="ok">✓ Meet e-mail odeslán</span>':'<span class="muted">Meet e-mail zatím neodeslán</span>'}</div>
+ </div>`).join(""):"<p class='muted'>Zatím nejsou žádné rezervace.</p>";
+}
+function renderOrders(data){
+ orders.innerHTML=data.length?`<table><thead><tr><th>Objednávka</th><th>Zákazník</th><th>Položky</th><th>Celkem</th><th>E-mail</th></tr></thead><tbody>${data.map(o=>`
+ <tr><td><b>${esc(o.order_number)}</b><div class="small">${new Date(o.created_at).toLocaleString("cs-CZ")}</div></td>
+ <td>${esc(o.customer_name)}<div class="small">${esc(o.customer_email)}<br>${esc(o.customer_phone)}</div></td>
+ <td>${o.items.map(i=>`${esc(i.name)} × ${i.quantity}`).join("<br>")}</td>
+ <td><b>${money(o.total)}</b></td>
+ <td>${o.email_sent?'<span class="ok">✓ odesláno</span>':'<span class="error">✗ neodesláno</span>'}</td></tr>`).join("")}</tbody></table>`:"<p class='muted'>Zatím nejsou žádné objednávky.</p>";
 }
 </script>
 </body>

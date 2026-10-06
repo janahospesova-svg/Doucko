@@ -55,16 +55,16 @@
 
   <!-- 🧭 HLAVIČKA A HORNÍ MENU – tady upravuj logo, navigaci a horní tlačítka. -->
   <header class="topbar">
-    <a class="brand" href="#home" data-route>
-      <span class="brand-mark">✏️</span>
-      <span>Chytrá<span>Třída</span></span>
+    <a class="brand" href="#home" data-route aria-label="Nauč se – domů">
+      <img class="brand-logo" src="logo-nauc-se.jpeg" alt="Logo Nauč se">
+      <span>Nauč <span>se</span></span>
     </a>
 
     <button class="mobile-menu" id="mobileMenu" aria-label="Otevřít menu">☰</button>
 
     <nav id="mainNav">
       <a href="#lectors" data-route>Lektoři</a>
-      <a href="#courses" data-route>Kurzy</a>
+      <a href="#courses" data-route>Kurzy</a><a href="#reservations" data-route>Rezervace</a>
       <a href="#products" data-route>Produkty</a>
       <a href="#materials" data-route>Moje materiály</a>
       <a href="#about" data-route>O nás</a>
@@ -84,14 +84,14 @@
         <div class="hero-copy">
           <span class="eyebrow">Učení bez stresu • radost z pokroku</span>
           <h1>Doučování, které děti <span>baví.</span></h1>
-          <p>Pomáháme školákům zvládnout základy, získat sebevědomí a připravit se na přijímačky. Tři lektoři, osobní přístup a materiály na jednom místě.</p>
+          <p>Pomáháme školákům zvládnout základy, získat sebevědomí a připravit se na přijímačky. Čtyři lektoři, osobní přístup a materiály na jednom místě.</p>
           <div class="hero-buttons">
             <a class="btn primary" href="#courses" data-route>Prohlédnout kurzy</a>
             <a class="btn secondary" href="#lectors" data-route>Poznat lektory</a>
           </div>
           <div class="trust-row">
             <div><strong>1.–5.</strong><span>třída</span></div>
-            <div><strong>3</strong><span>lektoři</span></div>
+            <div><strong>4</strong><span>lektoři</span></div>
             <div><strong>4.9/5</strong><span>hodnocení</span></div>
             <div><strong>100 %</strong><span>lidský přístup</span></div>
           </div>
@@ -137,7 +137,7 @@
 
     <!-- 👩‍🏫 LEKTOŘI – upravuj nadpis a úvod zde; profily lektorů se vykreslují z app.js. -->
     <section id="lectors" class="page">
-      <div class="page-header"><span class="eyebrow">Náš tým</span><h1>Seznamte se s lektory</h1><p>Tři sedmáci, kteří umí látku vysvětlit lidsky a srozumitelně. U každého lektora si můžete otevřít podrobnosti a po zkušenosti přidat vlastní hodnocení.</p></div>
+      <div class="page-header"><span class="eyebrow">Náš tým</span><h1>Seznamte se s lektory</h1><p>Čtyři lektoři, kteří umí látku vysvětlit lidsky a srozumitelně. U každého lektora si můžete otevřít podrobnosti a po zkušenosti přidat vlastní hodnocení.</p></div>
       <div id="lectorsGrid" class="lector-grid"></div>
     </section>
 
@@ -150,6 +150,11 @@
         <button class="filter" data-filter="prijimacky">Přijímačky</button>
       </div>
       <div id="coursesGrid" class="card-grid"></div>
+    </section>
+
+    <section id="reservations" class="page">
+      <div class="page-header"><span class="eyebrow">Doučování</span><h1>Rezervujte si termín</h1><p>Vyberte předmět a dostupný termín. Každý vypsaný termín má maximálně 5 míst.</p></div>
+      <div id="reservationCourses" class="card-grid"></div>
     </section>
 
     <!-- 🛍️ PRODUKTY – texty této sekce můžeš upravit zde; produkty se vykreslují z app.js. -->
@@ -175,7 +180,7 @@
           <p>Na webu najdete lekce, kurzy a materiály. Rodiče zase získají přehled o objednávkách, zakoupeném obsahu a předplatném.</p>
         </div>
         <div class="about-stats">
-          <div><strong>3</strong><span>lektoři</span></div><div><strong>1.–5.</strong><span>třída</span></div>
+          <div><strong>4</strong><span>lektoři</span></div><div><strong>1.–5.</strong><span>třída</span></div>
         </div>
       </div>
     </section>
@@ -201,5 +206,36 @@
        podobnou existující sekci a změnit její texty/classy.
        Funkční ID (např. pro modály nebo tlačítka) nemaž bez úpravy app.js.
        ================================================================ -->
+
+<section id="courseReviews" class="course-reviews" hidden>
+  <h3 id="courseReviewsTitle">Recenze tohoto kurzu</h3>
+  <p id="courseReviewsSummary">Načítám recenze…</p>
+  <div id="reviewList" class="review-list"></div>
+  <form id="reviewForm" class="review-form">
+    <h4>Napiš vlastní recenzi</h4>
+    <label>Jméno<input id="reviewAuthorName" maxlength="80" required></label>
+    <label>Hodnocení
+      <select id="reviewRating" required>
+        <option value="5">★★★★★ – 5/5</option>
+        <option value="4">★★★★☆ – 4/5</option>
+        <option value="3">★★★☆☆ – 3/5</option>
+        <option value="2">★★☆☆☆ – 2/5</option>
+        <option value="1">★☆☆☆☆ – 1/5</option>
+      </select>
+    </label>
+    <label>Recenze<textarea id="reviewText" maxlength="1000" rows="4" required></textarea></label>
+    <button type="submit" class="btn btn-primary">Odeslat recenzi</button>
+    <p id="reviewMessage" role="status"></p>
+  </form>
+</section>
+<style>
+.course-reviews{margin-top:28px;padding:22px;border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.07)}
+.review-list{display:grid;gap:12px;margin:18px 0}.review-card{padding:15px;border:1px solid #ddd;border-radius:14px}
+.review-card-top{display:flex;justify-content:space-between;gap:12px}.review-author{font-weight:700}
+.review-stars{white-space:nowrap}.review-date{font-size:.85em;opacity:.65}.review-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.review-empty{opacity:.7}.review-form{border-top:1px solid #ddd;padding-top:18px}.review-form label{display:grid;gap:6px;margin:10px 0}
+.review-form input,.review-form select,.review-form textarea{font:inherit;padding:10px;border:1px solid #bbb;border-radius:10px}
+</style>
+
 </body>
 </html>

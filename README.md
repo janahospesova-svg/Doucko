@@ -73,3 +73,44 @@ a další povinnosti podle způsobu provozu webu.
 - materiály a předplatné
 - profily lektorů a hodnocení
 - komentovaný `index.html`
+
+
+## Rezervační systém doučování
+
+- 4 lektoři: **Maru, Veru, Jana, Amy**
+- Termíny vytváříš, upravuješ a vypínáš v `admin.html`
+- Každý termín má vlastní kapacitu, výchozí **5 míst**
+- Zákazník vidí pouze aktivní termíny s volným místem
+- Backend znovu kontroluje obsazenost při rezervaci
+- Nová rezervace se uloží do SQLite a odešle se na `ADMIN_EMAIL`
+- V administraci doplníš Google Meet odkaz a heslo/kód
+- Po uložení Meet údajů se zákazníkovi automaticky odešle e-mail
+
+Administrace: `http://localhost:3000/admin.html`
+
+
+## Bezpečná kontrola cen
+
+Objednávkový server nyní používá vlastní `SERVER_CATALOG` v `server.js`.
+Cena a název položky poslané z prohlížeče se při vytvoření objednávky
+nepovažují za důvěryhodné. Server podle ID položky a jejího typu sám dohledá
+správnou cenu, přepíše název i cenu v objednávce a teprve potom spočítá celkovou
+částku. U produktů je v serverovém ceníku použita cena včetně 21 % DPH.
+
+To znamená, že úprava ceny v nástrojích prohlížeče sama o sobě nezmění částku
+uloženou v objednávce ani částku použitou v e-mailu administrátorovi.
+
+
+## Přidané zabezpečení
+
+- rate limiting pro veřejné API, objednávky, rezervace a administrátorská API,
+- limit velikosti JSON požadavku 50 KB,
+- bezpečnostní HTTP hlavičky a HSTS při HTTPS,
+- bezpečnější porovnání `ADMIN_KEY`,
+- administrace odmítne požadavky, pokud `ADMIN_KEY` není nastavený nebo má méně než 16 znaků.
+
+Rate limiting je uložen v paměti jedné instance. Při více instancích by byl vhodný sdílený store.
+
+
+## Serverové recenze
+Recenze kurzů jsou uložené v SQLite databázi. Návštěvníci vidí recenze ostatních lidí u stejného kurzu a mohou přidat vlastní hodnocení 1–5 hvězdiček. Vstupy jsou validované a text se při zobrazení bezpečně escapuje.
