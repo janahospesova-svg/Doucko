@@ -230,7 +230,7 @@ function makeReservationNumber() {
   return `REZ-${date}-${random}`;
 }
 
-const VALID_LECTURERS = new Set(["Maru", "Veru", "Jana", "Amy"]);
+const VALID_LECTURERS = new Set(["Maru", "Verča", "Jana", "Amy", "Anička"]);
 
 function buildReservationEmail(r) {
   return `NOVÁ REZERVACE DOUČOVÁNÍ – Nauč se

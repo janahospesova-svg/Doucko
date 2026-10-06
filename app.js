@@ -23,18 +23,19 @@ const ORDER_EMAIL = "objednavky@mojedoucovani.cz";
 
 const lecturers = [
   {id:1,name:"Maru",emoji:"👩‍🏫",bio:"Matematika a čeština pro mladší školáky. Vysvětluje krok za krokem a bez zbytečného stresu.",tags:["Matematika","Čeština","1.–5. třída"]},
-  {id:2,name:"Veru",emoji:"👩‍🏫",bio:"Pomáhá dětem s domácími úkoly, čtením a základy angličtiny. Ráda používá hry a příklady z běžného života.",tags:["Čeština","Angličtina","1.–5. třída"]},
+  {id:2,name:"Verča",emoji:"👩‍🏫",bio:"Pomáhá dětem s domácími úkoly, čtením a základy angličtiny. Ráda používá hry a příklady z běžného života.",tags:["Čeština","Angličtina","1.–5. třída"]},
   {id:3,name:"Jana",emoji:"🧑‍🏫",bio:"Specializuje se na matematiku a systematickou přípravu na přijímací zkoušky.",tags:["Matematika","Přijímačky","Procvičování"]},
-  {id:4,name:"Amy",emoji:"👩‍🏫",bio:"Pomáhá s angličtinou a češtinou a vede žáky k tomu, aby se nebáli zeptat.",tags:["Angličtina","Čeština","1.–5. třída"]}
+  {id:4,name:"Amy",emoji:"👩‍🏫",bio:"Pomáhá s angličtinou a češtinou a vede žáky k tomu, aby se nebáli zeptat.",tags:["Angličtina","Čeština","1.–5. třída"]},
+{name:"Anička", role:"Lektorka"}
 ];
 
 const courses = [
   {id:"c1",type:"1-5",title:"Matematika 1.–5. třída",desc:"Základy počítání, slovní úlohy, geometrie a procvičování.",price:199,emoji:"➗",rating:0,reviews:0,lecturer:"Maru",subscription:"Start"},
-  {id:"c2",type:"1-5",title:"Čeština hravě",desc:"Čtení, pravopis, větná stavba a zábavné procvičování.",price:199,emoji:"📚",rating:0,reviews:0,lecturer:"Veru",subscription:"Start"},
-  {id:"c3",type:"1-5",title:"Angličtina pro školáky",desc:"Základní slovíčka, věty a krátká konverzace pro děti.",price:249,emoji:"🇬🇧",rating:0,reviews:0,lecturer:"Veru",subscription:"Plus"},
+  {id:"c2",type:"1-5",title:"Čeština hravě",desc:"Čtení, pravopis, větná stavba a zábavné procvičování.",price:199,emoji:"📚",rating:0,reviews:0,lecturer:"Verča",subscription:"Start"},
+  {id:"c3",type:"1-5",title:"Angličtina pro školáky",desc:"Základní slovíčka, věty a krátká konverzace pro děti.",price:249,emoji:"🇬🇧",rating:0,reviews:0,lecturer:"Verča",subscription:"Plus"},
   {id:"c4",type:"prijimacky",title:"Přijímačky – matematika",desc:"Strukturované procvičování typových úloh a strategie řešení.",price:399,emoji:"🎯",rating:0,reviews:0,lecturer:"Jana",subscription:"Plus"},
-  {id:"c5",type:"prijimacky",title:"Přijímačky – čeština",desc:"Porozumění textu, gramatika a systematická příprava.",price:399,emoji:"📝",rating:0,reviews:0,lecturer:"Veru",subscription:"Plus"},
-  {id:"c6",type:"prijimacky",title:"Kompletní přijímačkový balíček",desc:"Matematika + čeština + bonusové materiály a kontrolní testy.",price:699,emoji:"🏆",rating:0,reviews:0,lecturer:"Jana + Veru",subscription:"Premium"}
+  {id:"c5",type:"prijimacky",title:"Přijímačky – čeština",desc:"Porozumění textu, gramatika a systematická příprava.",price:399,emoji:"📝",rating:0,reviews:0,lecturer:"Verča",subscription:"Plus"},
+  {id:"c6",type:"prijimacky",title:"Kompletní přijímačkový balíček",desc:"Matematika + čeština + bonusové materiály a kontrolní testy.",price:699,emoji:"🏆",rating:0,reviews:0,lecturer:"Jana + Verča",subscription:"Premium"}
 ];
 
 const products = [
@@ -486,28 +487,7 @@ function openCourse(id){
   refreshCourseReviewsInModal(id);
 }
 
-async function submitReview(e,id){
-  e.preventDefault();
-  const fd = new FormData(e.target);
-  try{
-    const response = await fetch("/api/reviews", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        courseId:id,
-        authorName:state.user?.name || "Uživatel",
-        rating:Number(fd.get("rating")),
-        text:String(fd.get("text") || "").trim()
-      })
-    });
-    const data = await response.json();
-    if(!response.ok) throw new Error(data.error || "Recenzi se nepodařilo odeslat.");
-    await refreshCourseReviewsInModal(id);
-    showToast("Děkujeme za recenzi!");
-  }catch(err){
-    showToast(err.message);
-  }
-}
+async function submitReview(e,id){e.preventDefault();const fd=new FormData(e.target);try{const response=await fetch("/api/reviews",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({courseId:id,authorName:state.user?.name||"Uživatel",rating:Number(fd.get("rating")),text:String(fd.get("text")||"").trim()})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Recenzi se nepodařilo uložit.");await refreshCourseReviewsInModal(id);renderCourses();renderHome();showToast("Děkujeme za recenzi!")}catch(err){showToast(err.message)}}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function openTerms(){showModal(`<button class="modal-close" onclick="closeModal()">×</button><h2>Obchodní podmínky – vzor</h2><p class="muted">Toto je pouze návrh textu pro demo. Před spuštěním skutečného e-shopu je potřeba doplnit skutečné identifikační údaje, podmínky plateb, dopravy, reklamací, odstoupení od smlouvy a zásady ochrany osobních údajů.</p><p>Pro reálný provoz doporučujeme právní kontrolu podmínek a napojení zabezpečené autentizace, databáze a platební brány.</p>`)}
 function route(){
